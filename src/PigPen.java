@@ -14,7 +14,6 @@ public class PigPen {
 	PigPen(int rows, int cols) {
 	    this.rows = rows;
 	    this.cols = cols;
-		board = new Board(rows,cols,2);
 		players = new ArrayList<Player>();
 	}
 	
@@ -29,6 +28,8 @@ public class PigPen {
 			}
 			catch(Exception e) {}
 		}
+		p.board = new Board(p.rows,p.cols, p.players.size());
+		
 		boolean over = false;
 			while(!over) {
 		for(int i = 0;i<p.players.size();i++) {
