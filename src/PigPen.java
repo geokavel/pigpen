@@ -7,9 +7,11 @@ import java.util.*;
 
 public class PigPen {
     static PigPen p;
+    static Random r = new Random(74836282);
 	Board board;
 	int rows, cols;
 	ArrayList<Player> players;
+	
 	
 	PigPen(int rows, int cols) {
 	    this.rows = rows;
@@ -62,4 +64,11 @@ public class PigPen {
 		}
 	}
 	
+	public static int random(int n) {
+		return r.nextInt(n);
+	}
+	
+	public static double random() {
+		return r.nextDouble();
+	}
 }
