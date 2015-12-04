@@ -53,7 +53,9 @@ public class Board {
 		}
 		int[] f = p.fences;
 		if(fence < 0 || fence > 3 || f[fence] != 0) {
-			for(int i = 0;i<4;i++) {
+			for(int i = fence+1;i != fence;i++) {
+				if(i > 3) i = 0;
+				if(fence==i) break;
 				if(f[i] == 0) {
 					fence = i;
 					break;
