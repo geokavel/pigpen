@@ -50,6 +50,13 @@ public class Pen  {
 	public int winner() {
 		return winner;
 	}
+	public int remaining() {
+		int r = 0;
+		for(int f : fences) {
+			if(f == 0) r++;
+		}
+		return r;
+	}
 	
 	
 

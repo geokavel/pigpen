@@ -30,6 +30,10 @@ public class Board {
 		return new Pen(this,-1);
 	}
 	
+	public ArrayList<Pen> getList() {
+		return new ArrayList<Pen>(list);
+	}
+	
 	public int[] scores() {
 		return scores.clone();
 	}
