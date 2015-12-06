@@ -4,13 +4,18 @@ import pigpen.*;
 
 import java.util.*;
 
+/**
+ * Picks a Pen with only one fence remaining. 
+ * Otherwise picks one with the most fences remaining
+ */
 public class Finisher extends Player implements Comparator<Pen> {
-  
-  
+
+
   public int[] pick(Board board) {
   	return Collections.max(board.getList(),this).pick(Pen.TOP);
   	
   }
+  
   
   @Override
   public int compare(Pen p1, Pen p2) {

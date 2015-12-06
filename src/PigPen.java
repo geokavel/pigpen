@@ -58,16 +58,22 @@ public class PigPen {
 	public void drawBoard() {
 	for(int i =0;i<p.rows;i++) {
 			for(int j = 0;j<p.cols;j++) {
-				System.out.print(p.board.getPenAt(i,j) + " ");
+				System.out.print(p.board.getPenAt(i,j).winner() + " ");
 			}
 			System.out.println();
 		}
 	}
 	
+	/**
+	 * @return a random int from 0 (inclusive) to n (exclusive).
+	 */
 	public static int random(int n) {
 		return r.nextInt(n);
 	}
 	
+	/**
+	 * @return a random double from 0 (inclusive) to 1 (exclusive).
+	 */
 	public static double random() {
 		return r.nextDouble();
 	}

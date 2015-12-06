@@ -3,6 +3,9 @@ package pigpen.players;
 
 import pigpen.*;
 
+/**
+ * Picks the first available fence in the first available Pen
+ */ 
 public class LinearPlayer extends Player {
 
 	

@@ -2,6 +2,9 @@ package pigpen.players;
 
 import pigpen.*;
 
+/**
+ * Picks the first available fence in the last available Pen
+ */
 public class BackwardPlayer extends Player {
 
 	public int[] pick(Board board) {

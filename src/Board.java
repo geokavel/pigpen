@@ -2,10 +2,17 @@ package pigpen;
 
 import java.util.*;
 
+/**
+ * The game board. It is composed of Pens in a grid.
+ */
+
 public class Board {
 	
 	ArrayList<Pen> list;
 	public final int rows,cols;
+	/** 
+	 * The number of Pens
+	 */
 	public final int size;
 	final int[] scores;
 	
@@ -20,20 +27,34 @@ public class Board {
 		scores = new int[players+1];
 	}
 	
-	public Pen getPenAt(int x, int y) {
-		return list.get(x*rows+y);
+	/**
+	 * Returns the Pen at the specified row and column
+	 */
+	public Pen getPenAt(int r, int c) {
+		return list.get(r*rows+c);
 	}
 	
+	/**
+	 * Returns the Pen at the specified ID. Pen ID's start at 1.
+	 */
 	public Pen get(int id) {
 		if(id > 0 && id <= size) 
 			return list.get(id-1);
 		return new Pen(this,-1);
 	}
 	
+	/**
+	 * Returns a copy of the underlying List of all the Pens.
+	 */
 	public ArrayList<Pen> getList() {
 		return new ArrayList<Pen>(list);
 	}
 	
+	/**
+	 * Returns the players' scores for the round. 
+	 * Each player's scores is at the index of the player's ID.
+	 * The first element is always 0.
+	 */
 	public int[] scores() {
 		return scores.clone();
 	}
