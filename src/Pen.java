@@ -6,39 +6,82 @@ package pigpen;
 
 public class Pen  {
     /**
-     * Constant value representing the top fence in a Pen
+     * Square Mode Top Fence
      */
     public static final int TOP = 0;
      /**
-      * Constant value representing the right fence in a Pen
+      * Square Mode Right Fence
       */
     public static final int RIGHT = 1;
      /**
-      * Constant value representing the bottom fence in a Pen
+      * Square Mode Bottom Fence
       */
     public static final int BOTTOM = 2;
      /**
-      * Constant value representing the left fence in a Pen
+      * Square Mode Left Fence
       */
     public static final int LEFT = 3;
+     /**
+      * Hexagon Mode North-East Fence
+      */
+    public static final int NE = 0;
+     /**
+      * Hexagon Mode East Fence
+      */
+    public static final int E = 1;
+     /**
+      * Hexagon Mode South-East Fence
+      */
+    public static final int SE = 2;
+     /**
+      * Hexagon Mode South-West Fence
+      */
+    public static final int SW = 3;
+     /**
+      * Hexagon Mode West Fence
+      */
+    public static final int W = 4;
+     /**
+      * Hexagon Mode North-West Fence
+      */
+    public static final int NW = 5;
     
 	Board board;
-	int[] fences = new int[4];
+	int[] fences;
 	int winner;
-	int id; 
+	int id;
+	public final int row,col;
+	int sides; 
 	
-	Pen(Board board,int id) {
+	Pen(Board board,int id, int sides) {
 		this.board = board;
 	    this.id = id;
+	    if(sides == 4) {
+	    row = (id-1)/board.cols;
+	    col = (id-1)%board.cols;
+	    }
+	    else {
+	    	int r=0,sum=0,old_sum=0;
+	    	while(sum<id) {
+	    		old_sum = sum;
+	    		sum+=board.rows-Math.abs(r-board.rows/2);
+	    		r++;
+	    	}
+	    	row = r-1;
+	    	col = id-1 - old_sum;
+	    }
+	    this.sides = sides;
+	    fences = new int[sides];
 	}
 	
 	/**
 	 * Generates a return value for Player.pick() 
-	 * @param fence the ID of the fence: TOP, RIGHT, BOTTOM, or LEFT
+	 * @param fence the ID of the fence: TOP, RIGHT, BOTTOM, or LEFT (Square Mode)
+	 * or NE, E, SE, SW, W, NW (Hexagon Mode)
 	 * @return      a two element array in the form [PenID, FenceID]
 	 */
 	public int[] pick(int fence) {
-		if(fence >= 0 && fence <4) 
+		if(fence >= 0 && fence <sides) 
 			return new int[]{id,fence};
 		return new int[]{id,0};
 	}
@@ -49,40 +92,40 @@ public class Pen  {
 		return winner>0;
 	}
 	
+	
+
+	
+
+	
 	/**
-	 * Gets the Pen to the left of this one on the Board. 
-	 * If there is no Pen to the left, one with ID -1 will be returned.
+	 * Gets the Pen neighboring the given fence
+	 * @return a neighboring Pen, or Pen with ID -1 if there is no neighbor sharing
+	 * the given fence
 	 */
-	public Pen left() {
-			return board.get(id-1);
+	public Pen n(int fence) {
+		if(sides == 4) {
+		switch(fence) {
+			case TOP : return board.getPenAt(row-1,col);
+			case RIGHT : return board.getPenAt(row,col+1);
+			case BOTTOM : return board.getPenAt(row+1,col);
+			case LEFT : return board.getPenAt(row,col-1);
+			default : return board.get(-1);
+		}
+		}
+		switch(fence) {
+			case NE : int c = row>board.rows/2?col+1:col;return board.getPenAt(row-1,c);
+			case E : return board.getPenAt(row,col+1);
+			case SE : c = row<board.rows/2?col+1:col;return board.getPenAt(row+1,c);
+			case SW : c = row<board.rows/2?col:col-1;return board.getPenAt(row+1,c);
+			case W : return board.getPenAt(row,col-1);
+			case NW : c = row>board.rows/2?col:col-1;return board.getPenAt(row-1,c);
+			default : return board.get(-1);
+		}
 	}
 	
 	/**
-	 * Gets the Pen to the right of this one on the Board. 
-	 * If there is no Pen to the right, one with ID -1 will be returned.
-	 */
-	public Pen right() {
-		return board.get(id+1);
-	}
-	
-	/**
-	 * Gets the Pen above this one on the Board. 
-	 * If there is no Pen above, one with ID -1 will be returned.
-	 */
-	public Pen up() {
-		return board.get(id - board.cols);
-	}
-	
-	/**
-	 * Gets the Pen below this one on the Board. 
-	 * If there is no Pen below, one with ID -1 will be returned.
-	 */
-	public Pen down() {
-		return board.get(id + board.cols);
-	}
-	
-	/**
-	 * Returns a four element array in the form [TOP,RIGHT,BOTTOM,LEFT]
+	 * Returns a four element array in the form [TOP,RIGHT,BOTTOM,LEFT] (Square Mode)
+	 * or [NE,E,SE,SW,W,NW] (Hexagon Mode)
 	 * containing the ID's of the players who have filled in the fences.
 	 * If no player has filled in a fence, it's value will be 0.
 	 */

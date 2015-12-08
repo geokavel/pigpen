@@ -9,29 +9,60 @@ import java.util.*;
 public class Board {
 	
 	ArrayList<Pen> list;
-	public final int rows,cols;
+	
+	public final int rows;
+	/**
+	 * (In Hexagon Mode, this is the number of columns in the shortest row
+	 * [equal to the side length of the hexagon].)
+	 */
+	public final int cols;
+	
+	/**
+	 * 4 in Square Mode, 6 in Hexagon Mode
+	 */
+	public final int sides;
 	/** 
 	 * The number of Pens
 	 */
 	public final int size;
-	final int[] scores;
+	int[] scores;
 	
-	Board(int rows, int cols, int players) {
+	Board(int sides, int rows, int cols) {
 		this.rows = rows;
 		this.cols = cols;
-		list = new ArrayList<Pen>(rows*cols);
-		for(int i = 0;i<rows*cols;i++) {
-			list.add(new Pen(this,i+1));
+		this.sides = sides;
+		size = sides==4 ? rows*cols : cols*(3*(cols-1))+1;
+		list = new ArrayList<Pen>(size);
+		for(int i = 0;i<size;i++) {
+			list.add(new Pen(this,i+1,sides));
 		}
-		size = list.size();
-		scores = new int[players+1];
+	}
+	
+	
+	void setPlayers(int n) {
+		scores = new int[n+1];
+	}
+	
+	/**
+	 * In Hexagon Mode, use this to see how many columns a given row has
+	 */
+	public int colsAt(int r) {
+		return sides==4 ? cols : rows-Math.abs(r-rows/2);
 	}
 	
 	/**
 	 * Returns the Pen at the specified row and column
 	 */
 	public Pen getPenAt(int r, int c) {
-		return list.get(r*rows+c);
+		//System.out.println(r +", "+c);
+	    if(r < 0 || c < 0 || r >= rows || c >= colsAt(r)) return get(-1);
+		if(sides == 4)
+			return get(r*rows+c+1);
+		
+		int sum = 0;
+		for(int i = 0;i<r;i++)
+			sum += colsAt(i);
+		return get(sum + c + 1);
 	}
 	
 	/**
@@ -40,7 +71,7 @@ public class Board {
 	public Pen get(int id) {
 		if(id > 0 && id <= size) 
 			return list.get(id-1);
-		return new Pen(this,-1);
+		return new Pen(this,-1,sides);
 	}
 	
 	/**
@@ -58,6 +89,7 @@ public class Board {
 	public int[] scores() {
 		return scores.clone();
 	}
+	
 	
 	boolean set(int pen, int fence, int player) {
 		if(pen < 1 || pen > size) pen = 1;
@@ -77,9 +109,9 @@ public class Board {
 			if(!success) return success;
 		}
 		int[] f = p.fences;
-		if(fence < 0 || fence > 3 || f[fence] != 0) {
+		if(fence < 0 || fence >= sides || f[fence] != 0) {
 			for(int i = fence+1;i != fence;i++) {
-				if(i > 3) i = 0;
+				if(i >= sides) i = 0;
 				if(fence==i) break;
 				if(f[i] == 0) {
 					fence = i;
@@ -87,13 +119,12 @@ public class Board {
 				}
 			}
 		}
-		Pen[] neighbors = new Pen[]{p.up(),p.right(),p.down(),p.left()};
-    	Pen[] both = new Pen[]{p, neighbors[fence]};
-    	int[] fs = new int[]{fence, (fence + 2) % 4};
+    	Pen[] both = new Pen[]{p, p.n(fence)};
+    	int[] fs = new int[]{fence, (fence + sides/2) % sides};
     	for(int i = 0;i<2;i++) {
     		int[] f2 = both[i].fences;
     		f2[fs[i]] = player;
-			if(f2[0]*f2[1]*f2[2]*f2[3] != 0) {
+			if(both[i].remaining() == 0) {
 				both[i].winner = player;
 				scores[player]++;
 			}
