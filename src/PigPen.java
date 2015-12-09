@@ -3,11 +3,14 @@ package pigpen;
 import pigpen.players.*;
 
 import java.util.*;
-
+import java.io.*;
 
 public class PigPen {
     static PigPen p;
     static Random r = new Random(74836282);
+    
+    static PrintWriter out;
+    
 	Board board;
 	int rows, cols,sides;
 	ArrayList<Player> players;
@@ -28,23 +31,23 @@ public class PigPen {
 		players = new ArrayList<Player>();
 	}
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
         p = new PigPen(args);
 		String[] names = new java.io.File("pigpen/players/").list();
 		for(String n : names) {
 			String c = "pigpen.players."+n.substring(0,n.indexOf("."));
-			try {
 			Player player = (Player)Class.forName(c).newInstance();
 			p.players.add(player);
-			}
-			catch(Exception e) {}
+		
 		}
 		p.board.setPlayers(p.players.size());
+		out = new PrintWriter("out.txt");
 		/*Scanner s = new Scanner(System.in);
 		while(true) {
 			System.out.println(p.board.get(s.nextInt()).n(s.nextInt()).id());
 		}*/
 		
+		PigPen.out.println("B: " + p.rows + " " + p.cols + " " + p.players.size());
 		boolean over = false;
 			while(!over) {
 		for(int i = 0;i<p.players.size();i++) {
@@ -65,6 +68,8 @@ public class PigPen {
 		for(int i : p.board.scores) {
 			System.out.println(i);
 		}	
+		out.flush();
+		out.close();
 
 	}
 	

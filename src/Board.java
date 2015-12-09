@@ -108,8 +108,9 @@ public class Board {
 			} 
 			if(!success) return success;
 		}
+		if(fence < 0 || fence >= sides) fence = 0;
 		int[] f = p.fences;
-		if(fence < 0 || fence >= sides || f[fence] != 0) {
+		if(f[fence] != 0) {
 			for(int i = fence+1;i != fence;i++) {
 				if(i >= sides) i = 0;
 				if(fence==i) break;
@@ -124,9 +125,11 @@ public class Board {
     	for(int i = 0;i<2;i++) {
     		int[] f2 = both[i].fences;
     		f2[fs[i]] = player;
+    		PigPen.out.println("F: " + both[i].id + " " + fs[i] + " " + player);
 			if(both[i].remaining() == 0) {
 				both[i].winner = player;
 				scores[player]++;
+				PigPen.out.println("W: " + both[i].id + " " + player);
 			}
 		}
 		return true;
