@@ -1,4 +1,4 @@
-How to Use PigPen Recorder
+####How to Use PigPen Recorder####
 
  1. Run the game in Square Mode. It will output a file called "out.txt".
  2. Run pp_record and select "out.txt".
