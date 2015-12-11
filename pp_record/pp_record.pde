@@ -2,9 +2,10 @@ import java.util.Scanner;
 
 int[][] lines;
 color[] colors;
+String[] players;
 PVector board;
 Scanner s;
-PGraphics fill, stroke;
+PGraphics fill, stroke, text;
 boolean fast = false;
 
 
@@ -24,6 +25,8 @@ void setup() {
   selectInput("Select a File (out.txt)","load");
   fill = createGraphics(width, height);
   stroke = createGraphics(width, height);
+  text = createGraphics(width, height);
+  colorMode(HSB,360,100,100);
   noLoop();
 }
 
@@ -41,24 +44,26 @@ void draw() {
   if(s == null) return;
   String pattern  = "[A-Z]:";
   if (s.hasNext(pattern)) {
-    background(255);
+    background(360);
     fill.beginDraw();
     stroke.beginDraw();
-    fill.scale(width/board.x, height/board.y);
-    stroke.scale(width/board.x, height/board.y);
-
+    text.beginDraw();
     char c = s.next(pattern).charAt(0);
-    if (c == 'B') {
+    if (c == 'P') {
+      players = s.nextLine().trim().split(" ");
+    } 
+    else if (c == 'B') {
       board.set(s.nextInt(), s.nextInt());
       colors = new int[s.nextInt()];
       for (int i = 0; i<colors.length; i++) {
-        colors[i] = lerpColor(color(255, 0, 0), color(0, 0, 255), i/(colors.length-1.));
+        colors[i] = color(map(i,0,colors.length-1,360,40),50,99);
       }
     } else if (c == 'F') {
       int pen = s.nextInt();
       int fence = s.nextInt();
       int player = s.nextInt();
       stroke.stroke(colors[player-1]);
+      stroke.scale(width/board.x, height/board.y);
       stroke.translate((pen-1) % int(board.y), (pen-1)/int(board.y));
       int[] l = lines[fence];
       stroke.scale(board.x/width, board.y/height);
@@ -68,16 +73,24 @@ void draw() {
     } else if (c == 'W') {
       int pen = s.nextInt();
       int player = s.nextInt();
-      fill.noStroke();
       fill.fill(colors[player-1]);
+      fill.scale(width/board.x, height/board.y);
       fill.translate((pen-1) % int(board.y), (pen-1)/int(board.y));
+      fill.noStroke();
       fill.rect(0, 0, 1, 1);
+      text.setMatrix(fill.getMatrix());
+      text.fill(0);
+      text.textAlign(CENTER,CENTER);
+      text.scale(board.x/width,board.y/height);
+      text.text(players[player-1],0,0,width/board.x,height/board.y);
     }
 
     stroke.endDraw();
     fill.endDraw();
+    text.endDraw();
     image(fill, 0, 0);
     image(stroke, 0, 0);
+    image(text, 0, 0);
     saveFrame("frames/f-###.png");
   } else {
     s.close();

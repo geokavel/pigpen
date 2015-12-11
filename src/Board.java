@@ -27,7 +27,7 @@ public class Board {
 	public final int size;
 	int[] scores;
 	
-	Board(int sides, int rows, int cols) {
+	Board(int sides, int rows, int cols,int players) {
 		this.rows = rows;
 		this.cols = cols;
 		this.sides = sides;
@@ -36,12 +36,10 @@ public class Board {
 		for(int i = 0;i<size;i++) {
 			list.add(new Pen(this,i+1,sides));
 		}
+		scores = new int[players+1];
 	}
 	
 	
-	void setPlayers(int n) {
-		scores = new int[n+1];
-	}
 	
 	/**
 	 * In Hexagon Mode, use this to see how many columns a given row has
@@ -125,11 +123,11 @@ public class Board {
     	for(int i = 0;i<2;i++) {
     		int[] f2 = both[i].fences;
     		f2[fs[i]] = player;
-    		PigPen.out.println("F: " + both[i].id + " " + fs[i] + " " + player);
+    		if(PigPen.output) PigPen.out.println("F: " + both[i].id + " " + fs[i] + " " + player);
 			if(both[i].remaining() == 0) {
 				both[i].winner = player;
 				scores[player]++;
-				PigPen.out.println("W: " + both[i].id + " " + player);
+				if(PigPen.output) PigPen.out.println("W: " + both[i].id + " " + player);
 			}
 		}
 		return true;
