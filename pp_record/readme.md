@@ -7,7 +7,7 @@
  5. To obtain a GIF of your video, go to http://ezgif.com/video-to-gif and upload the outputted video.
  6. Now you can post the GIF on PP&CG.
  
-![Image](http://i.stack.imgur.com/OOlWz.gif) 
+![Image](http://i.imgur.com/sEmJeqP.gif) 
  
 
 Here are links to pp_record binaries (I've only tested Mac version):
