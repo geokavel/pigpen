@@ -40,7 +40,8 @@ public class PigPen {
   board = new Board(sides, rows, cols, players.size());
     if (output) {
     	try {
-      out = new PrintWriter("out_"+round+".txt");
+    	new File("output").mkdir();
+      out = new PrintWriter("output/out_"+round+".txt");
       }
       catch(Exception e) {}
       out.print("P: "); 
