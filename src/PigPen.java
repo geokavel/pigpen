@@ -35,7 +35,7 @@ public class PigPen {
 	}
 	
 
-	public HashMap<Player,Integer> play(String round) {
+	HashMap<Player,Integer> play(String round) {
 	Collections.rotate(players,1);
   board = new Board(sides, rows, cols, players.size());
     if (output) {
@@ -85,9 +85,6 @@ public class PigPen {
     }
     }
 
-
-	public static void main(String[] args) throws Exception {
-	}
 	
 	void drawBoard() {
 	for(int i =0;i<rows;i++) {
