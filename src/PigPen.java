@@ -20,7 +20,7 @@ public class PigPen {
 	
 	PigPen(String[] args, Player... players) {
 		this.players = new ArrayList<Player>(Arrays.asList(players));
-		Collections.shuffle(this.players);
+		Collections.shuffle(this.players,r);
 		sides = Integer.parseInt(args[0]);
 		if(sides == 4) {
 	    	rows = Integer.parseInt(args[1]);

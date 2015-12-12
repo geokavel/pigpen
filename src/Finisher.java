@@ -16,7 +16,6 @@ public class Finisher extends Player implements Comparator<Pen> {
   	
   }
   
-  
   @Override
   public int compare(Pen p1, Pen p2) {
     //1 remaining is best, all remaining is second.

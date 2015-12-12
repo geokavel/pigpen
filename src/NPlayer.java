@@ -13,7 +13,6 @@ public class NPlayer {
 			scores.put(p,0);
 		}
 		
-		Collections.shuffle(players);
 		PigPen p = new PigPen(args,players.toArray(new Player[0]));
 		for(int r = 0;r<players.size();r++) { 
 			HashMap<Player,Integer> s = p.play(""+r+1);
