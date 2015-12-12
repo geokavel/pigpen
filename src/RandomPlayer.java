@@ -7,8 +7,8 @@ import pigpen.*;
  * Picks the first available fence in a random Pen 
  */
 public class RandomPlayer extends Player {
-	public int[] pick(Board board) {
-		int id = PigPen.random(board.size)+1;
-		return board.get(id).pick(Pen.TOP);
+	public int[] pick(Board board, int id) {
+		int pen = PigPen.random(board.size)+1;
+		return board.get(pen).pick(Pen.TOP);
 	}
 }

@@ -25,12 +25,17 @@ public class Board {
 	 * The number of Pens
 	 */
 	public final int size;
+	/**
+	 * The number of players
+	 */
+	public final int players;
 	int[] scores;
 	
 	Board(int sides, int rows, int cols,int players) {
 		this.rows = rows;
 		this.cols = cols;
 		this.sides = sides;
+		this.players = players;
 		size = sides==4 ? rows*cols : cols*(3*(cols-1))+1;
 		list = new ArrayList<Pen>(size);
 		for(int i = 0;i<size;i++) {
@@ -89,7 +94,7 @@ public class Board {
 	}
 	
 	
-	boolean set(int pen, int fence, int player) {
+	int set(int pen, int fence, int player) {
 		if(pen < 1 || pen > size) pen = 1;
 		Pen p = get(pen);
 		if(p.closed()) {
@@ -104,7 +109,7 @@ public class Board {
 					break;
 				}
 			} 
-			if(!success) return success;
+			if(!success) return -1;
 		}
 		if(fence < 0 || fence >= sides) fence = 0;
 		int[] f = p.fences;
@@ -118,6 +123,7 @@ public class Board {
 				}
 			}
 		}
+		int score = 0; 
     	Pen[] both = new Pen[]{p, p.n(fence)};
     	int[] fs = new int[]{fence, (fence + sides/2) % sides};
     	for(int i = 0;i<2;i++) {
@@ -125,11 +131,12 @@ public class Board {
     		f2[fs[i]] = player;
     		if(PigPen.output) PigPen.out.println("F: " + both[i].id + " " + fs[i] + " " + player);
 			if(both[i].remaining() == 0) {
+				score = 1;
 				both[i].winner = player;
 				scores[player]++;
 				if(PigPen.output) PigPen.out.println("W: " + both[i].id + " " + player);
 			}
 		}
-		return true;
+		return score;
 	}
 }

@@ -10,9 +10,9 @@ public class LinearPlayer extends Player {
 
 	
 	@Override
-	public int[] pick(Board board) {
-		for(int id = 1;id<=board.size;id++) {
-			Pen pen = board.get(id);
+	public int[] pick(Board board, int id) {
+		for(int p = 1;p<=board.size;p++) {
+			Pen pen = board.get(p);
 				if(!pen.closed()) {
 					int[] fences = pen.fences();
 						for(int i =0;i<fences.length;i++) {
