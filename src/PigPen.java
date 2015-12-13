@@ -13,6 +13,7 @@ public class PigPen {
     
 	Board board;
 	int rows, cols,sides;
+	int round = 0;
 	ArrayList<Player> players;
 	
 	static boolean output = false;;
@@ -39,13 +40,14 @@ public class PigPen {
 	}
 	
 
-	HashMap<Class,Integer> play(String round) {
+	HashMap<Class,Integer> play(String label) {
+	round++;
 	Collections.rotate(players,1);
   board = new Board(sides, rows, cols, players.size());
     if (output) {
     	try {
     	new File("output").mkdir();
-      out = new PrintWriter("output/out_"+round+".txt");
+      out = new PrintWriter("output/out_"+label+".txt");
       }
       catch(Exception e) {}
       out.print("P: "); 
@@ -60,7 +62,7 @@ public class PigPen {
         Player pl = players.get(i);
         int status = 1;
         while (status == 1) {
-          int[] pick = pl.pick(board, i+1 );
+          int[] pick = pl.pick(board, i+1, round);
           if (pick == null || pick.length < 2) 
             pick = new int[]{1, 0};
           //Scanner s = new Scanner(System.in);

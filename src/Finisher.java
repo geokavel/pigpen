@@ -11,7 +11,7 @@ import java.util.*;
 public class Finisher extends Player implements Comparator<Pen> {
 
 
-  public int[] pick(Board board, int id) {
+  public int[] pick(Board board, int id, int round) {
   	return Collections.max(board.getList(),this).pick(Pen.TOP);
   	
   }

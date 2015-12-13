@@ -7,7 +7,7 @@ import pigpen.*;
  */
 public class BackwardPlayer extends Player {
 
-	public int[] pick(Board board, int id) {
+	public int[] pick(Board board, int id, int round) {
 		for(int i = board.size;i>0;i--) {
 			Pen p = board.get(i);
 			if(!p.closed()) {

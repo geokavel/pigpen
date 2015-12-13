@@ -102,7 +102,7 @@ public class Lazybones extends Player {
     private boolean negative = false;
 
     @Override
-    public int[] pick(Board board, int id) {
+    public int[] pick(Board board, int id, int round) {
         List<Pen> money = board.getList().stream()
                 .filter(p -> p.remaining() == 1).collect(Collectors.toList());
         if (!money.isEmpty()) {
