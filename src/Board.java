@@ -54,7 +54,8 @@ public class Board {
 	}
 	
 	/**
-	 * Returns the Pen at the specified row and column
+	 * Returns the Pen at the specified row and column (0-indexed).
+	 * If there is no Pen at the specified location, a Pen with ID -1 is returned.
 	 */
 	public Pen getPenAt(int r, int c) {
 		//System.out.println(r +", "+c);
@@ -69,7 +70,8 @@ public class Board {
 	}
 	
 	/**
-	 * Returns the Pen at the specified ID. Pen ID's start at 1.
+	 * Returns the Pen at the specified ID. Pen ID's start at 1. 
+	 * If there is no pen with the given ID, a Pen with ID -1 is returned.
 	 */
 	public Pen get(int id) {
 		if(id > 0 && id <= size) 
