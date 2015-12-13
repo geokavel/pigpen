@@ -18,8 +18,12 @@ public class PigPen {
 	static boolean output = false;;
 	
 	
-	PigPen(String[] args, Player... players) {
-		this.players = new ArrayList<Player>(Arrays.asList(players));
+	PigPen(String[] args, Class... players) {
+		this.players = new ArrayList<Player>();
+		try {
+		for(Class c : players) this.players.add((Player)c.newInstance());
+		}
+		catch(Exception e) {}
 		Collections.shuffle(this.players,r);
 		sides = Integer.parseInt(args[0]);
 		if(sides == 4) {
@@ -35,7 +39,7 @@ public class PigPen {
 	}
 	
 
-	HashMap<Player,Integer> play(String round) {
+	HashMap<Class,Integer> play(String round) {
 	Collections.rotate(players,1);
   board = new Board(sides, rows, cols, players.size());
     if (output) {
@@ -74,9 +78,9 @@ public class PigPen {
             out.flush();
             out.close();
           }
-          HashMap<Player, Integer> scores = new HashMap<Player, Integer>();
+          HashMap<Class, Integer> scores = new HashMap<Class, Integer>();
           for (int s = 0; s<players.size(); s++) {
-            scores.put(players.get(s), board.scores[s+1]);
+            scores.put(players.get(s).getClass(), board.scores[s+1]);
           }
           return scores;
         }  
@@ -111,25 +115,24 @@ public class PigPen {
 		return r.nextDouble();
 	}
 	
-	static ArrayList<Player> allPlayers() throws Exception {
-		ArrayList<Player> players = new ArrayList<Player>();
+	static ArrayList<Class> allPlayers() throws Exception {
+		ArrayList<Class> players = new ArrayList<Class>();
 		String[] names = new java.io.File("pigpen/players/").list();
 		for(String n : names) {
 			if(n.contains("$")) continue;
 			String c = "pigpen.players."+n.substring(0,n.indexOf("."));
-			Player player = (Player)Class.forName(c).newInstance();
-			players.add(player);
+			players.add((Class)Class.forName(c));
 		}
 		return players;
 	}
 	
 	
-	static ArrayList<Map.Entry<Player,Integer>> rank(HashMap<Player,Integer> scores) {
-		ArrayList<Map.Entry<Player,Integer>> rankings = new ArrayList<Map.Entry<Player,Integer>>(scores.entrySet());
-		Collections.sort(rankings,new Comparator<Map.Entry<Player,Integer>>() {
+	static ArrayList<Map.Entry<Class,Integer>> rank(HashMap<Class,Integer> scores) {
+		ArrayList<Map.Entry<Class,Integer>> rankings = new ArrayList<Map.Entry<Class,Integer>>(scores.entrySet());
+		Collections.sort(rankings,new Comparator<Map.Entry<Class,Integer>>() {
 		
 		@Override
-	public int compare(Map.Entry<Player,Integer> a, Map.Entry<Player,Integer> b) {
+	public int compare(Map.Entry<Class,Integer> a, Map.Entry<Class,Integer> b) {
 		return -a.getValue().compareTo(b.getValue());
 	}
 		
@@ -137,10 +140,10 @@ public class PigPen {
 		return rankings;
 	}
 	
-	static void printRankings(ArrayList<Map.Entry<Player,Integer>> rankings) {
+	static void printRankings(ArrayList<Map.Entry<Class,Integer>> rankings) {
 		System.out.println();
-		for(Map.Entry<Player,Integer> rank : rankings) {
-			System.out.println(rank.getKey().getClass().getSimpleName()+": "+rank.getValue());
+		for(Map.Entry<Class,Integer> rank : rankings) {
+			System.out.println(rank.getKey().getSimpleName()+": "+rank.getValue());
 		}
 	}
 }
