@@ -115,6 +115,7 @@ public class PigPen {
 		ArrayList<Player> players = new ArrayList<Player>();
 		String[] names = new java.io.File("pigpen/players/").list();
 		for(String n : names) {
+			if(n.contains("$")) continue;
 			String c = "pigpen.players."+n.substring(0,n.indexOf("."));
 			Player player = (Player)Class.forName(c).newInstance();
 			players.add(player);
