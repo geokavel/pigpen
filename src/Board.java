@@ -30,18 +30,33 @@ public class Board {
 	 */
 	public final int players;
 	int[] scores;
+	PigPen pp;
 	
-	Board(int sides, int rows, int cols,int players) {
+	Board(int sides, int rows, int cols,int players, PigPen pp) {
 		this.rows = rows;
 		this.cols = cols;
 		this.sides = sides;
 		this.players = players;
+		this.pp = pp;
 		size = sides==4 ? rows*cols : cols*(3*(cols-1))+1;
 		list = new ArrayList<Pen>(size);
 		for(int i = 0;i<size;i++) {
 			list.add(new Pen(this,i+1,sides));
 		}
 		scores = new int[players+1];
+	}
+	
+	/**
+	 * Get a list of the given player's moves
+	 */
+	public LinkedList<int[]> moves(int player) {
+		if(player < 1 || player > players) return null;
+		LinkedList<int[]> m =  pp.players.get(player-1).moves;
+		LinkedList<int[]> copy = new LinkedList<int[]>();
+		for(int[] move : m) {
+			copy.add(move.clone());
+		}
+		return copy;
 	}
 	
 	
@@ -126,12 +141,13 @@ public class Board {
 			}
 		}
 		int score = 0; 
+		pp.players.get(player-1).moves.add(new int[] {p.id(),fence});
     	Pen[] both = new Pen[]{p, p.n(fence)};
     	int[] fs = new int[]{fence, (fence + sides/2) % sides};
     	for(int i = 0;i<2;i++) {
     		int[] f2 = both[i].fences;
     		f2[fs[i]] = player;
-    		if(PigPen.output) PigPen.out.println("F: " + both[i].id + " " + fs[i] + " " + player);
+    		if(PigPen.output && both[i].id != -1) PigPen.out.println("F: " + both[i].id + " " + fs[i] + " " + player);
 			if(both[i].remaining() == 0) {
 				score = 1;
 				both[i].winner = player;

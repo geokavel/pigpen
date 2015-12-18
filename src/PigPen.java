@@ -16,7 +16,7 @@ public class PigPen {
 	int round = 0;
 	ArrayList<Player> players;
 	
-	static boolean output = false;;
+	static boolean output = false;
 	
 	
 	PigPen(String[] args, Class... players) {
@@ -43,7 +43,8 @@ public class PigPen {
 	HashMap<Class,Integer> play(String label) {
 	round++;
 	Collections.rotate(players,1);
-  board = new Board(sides, rows, cols, players.size());
+	for(Player p : players) p.moves = new LinkedList<int[]>();
+  board = new Board(sides, rows, cols, players.size(),this);
     if (output) {
     	try {
     	new File("output").mkdir();
@@ -68,11 +69,11 @@ public class PigPen {
           //Scanner s = new Scanner(System.in);
           //int[] pick = new int[]{s.nextInt(),s.nextInt()};
           if (output) {
-            System.out.println(pick[0] + " " + pick[1]);
+            //System.out.println(pick[0] + " " + pick[1]);
           }
           status = board.set(pick[0], pick[1], i+1);
           if (output) {
-          drawBoard();
+          //drawBoard();
         }
         }
         if (status == -1) {

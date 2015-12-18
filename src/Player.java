@@ -1,6 +1,10 @@
 package pigpen;
 
+import java.util.LinkedList;
+
 public abstract class Player {
+
+LinkedList<int[]> moves =  new LinkedList<int[]>();
   
   
 /**
@@ -10,6 +14,6 @@ public abstract class Player {
  * @return      an int[] of the form [PenID,FenceID]
  */
   public abstract int[] pick(Board board, int id, int round); 
-  
+
   
 }
